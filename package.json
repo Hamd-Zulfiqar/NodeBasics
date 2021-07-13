@@ -1,0 +1,12 @@
+{
+  "name": "node_basics",
+  "version": "1.0.0",
+  "description": "Testing out basics of Node itself",
+  "main": "index.js",
+  "scripts": {
+    "test": "start",
+    "start": "node index.js"
+  },
+  "author": "Hamd Zulfiqar",
+  "license": "ISC"
+}
