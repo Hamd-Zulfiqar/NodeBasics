@@ -8,5 +8,8 @@
     "start": "node index.js"
   },
   "author": "Hamd Zulfiqar",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^10.0.0"
+  }
 }
