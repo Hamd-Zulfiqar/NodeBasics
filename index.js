@@ -2,10 +2,19 @@ const dotenv = require('dotenv');
 const http = require('http');
 const axios = require('axios');
 const express = require('express');
+const bodyParser = require('body-parser');
+const Student = require('./models/student');
+const { json } = require('body-parser');
 
 dotenv.config();
 
 const server = express();
+server.use(bodyParser.json());
+
+//* setting up a static dummy data array to practice
+var students = [new Student("Hamd","Zulfiqar",7),
+                new Student("Omer","Qazi",5),
+                new Student("Qasim","Munir",3),]
 
 server.get('/', (req,res) => {
     res.write("Response from Express .get method!");
@@ -13,21 +22,43 @@ server.get('/', (req,res) => {
     res.end();
 })
 
-//* Testing url params here
-server.get('/api/student/:name', (req,res) => {
-    console.log(req.params);
-    res.write(`student name is ${req.params.name}`);
+//Student CRUD
+
+server.get('/api/students', (req,res) => {
+    res.json(JSON.parse(JSON.stringify(students)));
     res.statusCode = 200;
     res.end();
 })
 
-//* Testing url query here
-server.get('/api/student' , (req,res) => {
-    console.log(req.query);
-    res.write(`student query is ${req.query.name}`);
-    res.statusCode = 200;
+server.get('/api/student/:name', (req,res) => {
+    students.forEach((student, index) => {
+        if(student.name == req.params.name){
+            res.json(JSON.parse(JSON.stringify(students[index])));
+            res.statusCode = 200;
+            res.end();
+        }
+    });
+
+    res.statusCode = 404;
+    res.json({'message': 'Not found...'});
     res.end();
 })
+
+//* Testing url params here
+// server.get('/api/student/:name', (req,res) => {
+//     console.log(req.params);
+//     res.write(`student name is ${req.params.name}`);
+//     res.statusCode = 200;
+//     res.end();
+// })
+
+// //* Testing url query here
+// server.get('/api/student' , (req,res) => {
+//     console.log(req.query);
+//     res.write(`student query is ${req.query.name}`);
+//     res.statusCode = 200;
+//     res.end();
+// })
 
 server.listen(process.env.PORT);
 
