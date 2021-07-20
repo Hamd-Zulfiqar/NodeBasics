@@ -3,15 +3,18 @@ const http = require('http');
 const axios = require('axios');
 const express = require('express');
 const bodyParser = require('body-parser');
-const Student = require('./models/student');
 const { json } = require('body-parser');
 const morgan = require('morgan');
+const {sequelize} = require('./models');
 
 dotenv.config();
 
 const server = express();
 server.use(bodyParser.json());
 server.use(morgan('tiny'));
+
+//* Establish DB
+
 
 const student = require('./routes/student');
 
@@ -53,7 +56,10 @@ server.use('/student', student);
 //     res.end();
 // })
 
-server.listen(process.env.PORT);
+server.listen(process.env.PORT, async () => {
+    await sequelize.authenticate();
+    console.log("Database Connected!");
+});
 
 // const getTodo = async () => {
 //     try{

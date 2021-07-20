@@ -7,4 +7,6 @@ route.get('/all', student.getStudents);
 
 route.get('/one/:name', student.getStudent);
 
+route.post('/new', student.createStudent);
+
 module.exports = route;

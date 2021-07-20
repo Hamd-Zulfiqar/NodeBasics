@@ -1,15 +1,35 @@
-const Student = require('../models/student');
-
-//* setting up a static dummy data array to practice
-var students = [new Student("Hamd","Zulfiqar",7),
-                new Student("Omer","Qazi",5),
-                new Student("Qasim","Munir",3),]
+//const Student = require('../models/student');
+const {studenttb} = require('../models');
 
 
-const getStudents = (req, res) => {
-    res.json(JSON.parse(JSON.stringify(students)));
-    res.statusCode = 200;
-    res.end();
+const createStudent = async (req, res) => {
+    try{
+        const {name, fathername, classno} = req.body;
+        const user = await studenttb.create({name,fathername,classno});
+        
+        res.json(user);
+        res.statusCode(200);
+        res.end();
+    }
+    catch(exception){
+        res.json({success: false, message: "Failed to create student"});
+        res.statusCode(505);
+        res.end();
+    }
+}
+
+const getStudents = async (req, res) => {
+    try {
+        const users = await studenttb.findAll();
+
+        res.json({success: true, message: "Students retrieved!", data: users});
+        res.statusCode(200);
+        return res.end();
+    } catch (error) {
+        res.json({success: false, message: "Error!"});
+        //res.statusCode(404);
+        res.end();
+    }
 }
 
 const getStudent = (req, res) => {
@@ -31,3 +51,4 @@ const getStudent = (req, res) => {
 
 module.exports.getStudents = getStudents;
 module.exports.getStudent = getStudent;
+module.exports.createStudent = createStudent;
