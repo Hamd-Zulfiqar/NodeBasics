@@ -5,44 +5,37 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const Student = require('./models/student');
 const { json } = require('body-parser');
+const morgan = require('morgan');
 
 dotenv.config();
 
 const server = express();
 server.use(bodyParser.json());
+server.use(morgan('tiny'));
 
-//* setting up a static dummy data array to practice
-var students = [new Student("Hamd","Zulfiqar",7),
-                new Student("Omer","Qazi",5),
-                new Student("Qasim","Munir",3),]
+const student = require('./routes/student');
 
-server.get('/', (req,res) => {
-    res.write("Response from Express .get method!");
-    res.statusCode = 200;
-    res.end();
-})
+server.use('/student', student);
 
-//Student CRUD
+// server.get('/api/students', (req,res) => {
+//     res.json(JSON.parse(JSON.stringify(students)));
+//     res.statusCode = 200;
+//     res.end();
+// })
 
-server.get('/api/students', (req,res) => {
-    res.json(JSON.parse(JSON.stringify(students)));
-    res.statusCode = 200;
-    res.end();
-})
+// server.get('/api/student/:name', (req,res) => {
+//     students.forEach((student, index) => {
+//         if(student.name == req.params.name){
+//             res.json(JSON.parse(JSON.stringify(students[index])));
+//             res.statusCode = 200;
+//             res.end();
+//         }
+//     });
 
-server.get('/api/student/:name', (req,res) => {
-    students.forEach((student, index) => {
-        if(student.name == req.params.name){
-            res.json(JSON.parse(JSON.stringify(students[index])));
-            res.statusCode = 200;
-            res.end();
-        }
-    });
-
-    res.statusCode = 404;
-    res.json({'message': 'Not found...'});
-    res.end();
-})
+//     res.statusCode = 404;
+//     res.json({'message': 'Not found...'});
+//     res.end();
+// })
 
 //* Testing url params here
 // server.get('/api/student/:name', (req,res) => {
